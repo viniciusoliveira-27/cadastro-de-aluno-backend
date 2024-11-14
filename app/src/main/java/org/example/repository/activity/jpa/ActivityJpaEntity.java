@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 
 
 @Entity(name = "Activity")
-@Table(name = "activities")
+@Table(name = "alunos")
 public class ActivityJpaEntity {
 
     @Id

@@ -15,7 +15,7 @@ public class InsertActivityInputToActivityMapper implements Function<InsertActiv
     @Override
     public Activity apply(final InsertActivityInputDto input) {
 
-        if (input.periodo().equals(Type.MANHA)) {
+        if (input.periodo().trim().toUpperCase().equals(Type.MANHA.toString())) {
             final var anActivity = Activity.newActivity(
                 input.nome(),
                 input.serie(), 
@@ -25,7 +25,7 @@ public class InsertActivityInputToActivityMapper implements Function<InsertActiv
                 input.data());
 
             return anActivity;
-        } else if (input.periodo().equals(Type.TARDE)) {
+        } else if (input.periodo().trim().toUpperCase().equals(Type.TARDE.toString())) {
             final var anActivity = Activity.newActivity(
                 input.nome(),
                 input.serie(), 
