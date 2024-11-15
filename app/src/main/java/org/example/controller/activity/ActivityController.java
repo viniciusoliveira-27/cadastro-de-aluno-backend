@@ -11,7 +11,9 @@ import org.example.repository.activity.jpa.ActivityJpaRepository;
 import org.example.service.activity.implementation.ActivityServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +56,17 @@ public class ActivityController {
                 .apply(aServiceResponse);
 
         return ResponseEntity.ok().body(aResponse);
+        
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActivityById(@PathVariable("id") final String anId) {
+
+        final var aGateway = ActivityJpaGateway.build(activityRepository);  
+        final var aService = ActivityServiceImplementation.build(aGateway);
+
+        aService.removeActivity(anId);
+
+        return ResponseEntity.noContent().build();
         
     }
 }
