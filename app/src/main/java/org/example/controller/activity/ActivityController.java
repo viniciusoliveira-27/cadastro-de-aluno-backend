@@ -1,5 +1,6 @@
 package org.example.controller.activity;
 
+import org.example.controller.activity.dto.CalculateBalanceResponseDto;
 import org.example.controller.activity.dto.InsertActivityRequestDto;
 import org.example.controller.activity.dto.InsertActivityResponseDto;
 import org.example.controller.activity.dto.ListActivitiesResponseDto;
@@ -66,7 +67,18 @@ public class ActivityController {
 
         aService.removeActivity(anId);
 
-        return ResponseEntity.noContent().build();
-        
+        return ResponseEntity.noContent().build();        
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<CalculateBalanceResponseDto> calculateBalance() {
+        final var aGateway = ActivityJpaGateway.build(activityRepository);  
+        final var aService = ActivityServiceImplementation.build(aGateway);
+
+        final var aServiceResponse = aService.calculateBalance();
+
+        final var aResponse = new CalculateBalanceResponseDto(aServiceResponse);
+
+        return ResponseEntity.ok().body(aResponse);
     }
 }
