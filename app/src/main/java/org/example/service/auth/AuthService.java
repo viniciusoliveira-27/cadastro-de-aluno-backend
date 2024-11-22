@@ -5,6 +5,9 @@ import org.example.service.auth.dto.LoginServiceInputDto;
 import org.example.service.auth.dto.LoginServiceOutputDto;
 import org.example.service.auth.exception.AuthException;
 import org.example.service.auth.exception.LoginException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -12,7 +15,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 
 @Service
-public class AuthService {
+public class AuthService implements UserDetailsService {
 
     //Usuario unico da aplicação
     final User uniqueUser = User.with("viniciusoliveira.270304@gmail.com", "Predator@27");
@@ -71,4 +74,17 @@ public class AuthService {
         }
 
     }
+
+    @Override
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+
+        if(username.equals(this.uniqueUser.getUsername()))  {
+            return this.uniqueUser;
+        }else {
+            throw new UsernameNotFoundException("User not found");
+        }       
+        
+    }
+
+
 }
