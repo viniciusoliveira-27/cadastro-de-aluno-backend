@@ -1,10 +1,9 @@
 package org.example.controller.exception.handler;
 
-import org.example.domain.activity.exceptions.DomainException;
-import org.example.repository.exception.PersistenceException;
-import org.example.service.activity.exception.ServiceException;
-import org.example.utils.InstantUtils;
 import org.example.controller.exception.handler.body.ExceptionResponseBody;
+import org.example.service.auth.exception.AuthException;
+import org.example.service.auth.exception.LoginException;
+import org.example.utils.InstantUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,11 +12,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice("org.example.controller.activity")
-public class ActivityControllerExceptionHandler extends ResponseEntityExceptionHandler {
+@ControllerAdvice("org.example.controller.authentication")
+public class AuthControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {DomainException.class})
-    protected ResponseEntity<ExceptionResponseBody> handleDomainException(final DomainException anException, final HttpServletRequest aRequest) {
+    @ExceptionHandler(value = {LoginException.class})
+    protected ResponseEntity<ExceptionResponseBody> handleLoginException(final LoginException anException, final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
                 InstantUtils.now(),
@@ -28,8 +27,8 @@ public class ActivityControllerExceptionHandler extends ResponseEntityExceptionH
             return ResponseEntity.badRequest().body(aBody);        
     }
 
-    @ExceptionHandler(value = {PersistenceException.class})
-    protected ResponseEntity<ExceptionResponseBody> handleDomainException(final PersistenceException anException, final HttpServletRequest aRequest) {
+    @ExceptionHandler(value = {AuthException.class})
+    protected ResponseEntity<ExceptionResponseBody> handleAuthException(final AuthException anException, final HttpServletRequest aRequest) {
 
         final var aBody = new ExceptionResponseBody(
                 InstantUtils.now(),
@@ -38,18 +37,6 @@ public class ActivityControllerExceptionHandler extends ResponseEntityExceptionH
                 aRequest.getRequestURI());
 
             return ResponseEntity.internalServerError().body(aBody);        
-    }
-
-    @ExceptionHandler(value = {ServiceException.class})
-    protected ResponseEntity<ExceptionResponseBody> handleDomainException(final ServiceException anException, final HttpServletRequest aRequest) {
-
-        final var aBody = new ExceptionResponseBody(
-                InstantUtils.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                anException.getMessage(),
-                aRequest.getRequestURI());
-
-            return ResponseEntity.badRequest().body(aBody);        
     }
 
     @ExceptionHandler(value = {Exception.class})
