@@ -2,6 +2,8 @@ package org.example.controller.authentification;
 
 import org.example.controller.authentification.dto.LoginRequestDto;
 import org.example.controller.authentification.dto.LoginResponseDto;
+import org.example.controller.authentification.dto.ValidateRequestDto;
+import org.example.controller.authentification.dto.ValidateResponseDto;
 import org.example.controller.authentification.dto.mapper.LoginRequestToLoginServiceInputMapper;
 import org.example.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,21 @@ public class AuthentificationController {
 
         return ResponseEntity.ok(aResponse);
        
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<ValidateResponseDto> validate(@RequestBody @Valid final ValidateRequestDto input) {
+
+        final var aServiceOutput = this.authService.validateToken(input.token());
+
+        var isValid = false;
+        
+        if(!aServiceOutput.isBlank()) {
+            isValid = true;
+        }
+
+        return ResponseEntity.ok().body(new ValidateResponseDto(isValid));
+
     }
     
 }

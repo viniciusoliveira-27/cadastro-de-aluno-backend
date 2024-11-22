@@ -18,7 +18,6 @@ public class AuthService {
     final User uniqueUser = User.with("viniciusoliveira.270304@gmail.com", "Predator@27");
 
     private final String TOKEN_SECRET = "123456";
-
     private final String TOKEN_ISSUER = "org.example";
 
     public LoginServiceOutputDto login(final LoginServiceInputDto input) {
@@ -36,11 +35,9 @@ public class AuthService {
     }   
     
     private String createToken(final User anUser) {
-
-        final var anAlgorithm = Algorithm.HMAC256(TOKEN_SECRET);
-
-
+        
         try{
+            final var anAlgorithm = Algorithm.HMAC256(TOKEN_SECRET);
             final var aToken = JWT.create()
                 .withIssuer(TOKEN_ISSUER)
                 .withSubject(anUser.getEmail())
@@ -53,5 +50,25 @@ public class AuthService {
         } catch(JWTCreationException e) {
             throw new AuthException(e.getMessage());
         }
+    }
+
+    public String validateToken(final String aToken) {
+
+        try {
+            final var anAlgorithm = Algorithm.HMAC256(TOKEN_SECRET);
+            final var aVerifier = JWT.require(anAlgorithm)
+                .withIssuer(TOKEN_ISSUER)
+                .build();
+
+            final var aDecodedToken = aVerifier.verify(aToken);
+
+            final var aSubject = aDecodedToken.getSubject();
+
+            return aSubject;
+        }catch (Exception e) {
+            return "";
+            
+        }
+
     }
 }
